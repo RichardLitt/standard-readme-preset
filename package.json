@@ -1,6 +1,6 @@
 {
   "name": "standard-readme-preset",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "",
   "main": "index.js",
   "scripts": {
@@ -13,7 +13,7 @@
     "remark-lint-appropriate-heading": "^2.0.2"
   },
   "coordinates": [
-    52.5006736,
-    13.4194086
+    52.5006656,
+    13.4193688
   ]
 }
