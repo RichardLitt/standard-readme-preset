@@ -1,3 +1,3 @@
 exports.plugins = [
-  [require('remark-lint-appropriate-header', 'exact')]
+  [require('remark-lint-appropriate-heading')]
 ]
