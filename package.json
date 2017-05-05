@@ -1,0 +1,19 @@
+{
+  "name": "standard-readme-preset",
+  "version": "1.0.1",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "remark-lint-appropriate-heading": "^2.0.2"
+  },
+  "coordinates": [
+    52.5006736,
+    13.4194086
+  ]
+}
