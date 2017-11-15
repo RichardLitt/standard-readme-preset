@@ -1,11 +1,25 @@
 {
   "name": "standard-readme-preset",
   "version": "1.0.2",
-  "description": "",
-  "main": "index.js",
-  "keywords": [],
-  "author": "",
+  "description": "remark preset to configure remark-lint with rules that standard-readme",
   "license": "ISC",
+  "keywords": [
+    "remark",
+    "lint",
+    "preset",
+    "standard",
+    "readme"
+  ],
+  "repository": "RichardLitt/standard-readme-preset",
+  "bugs": "https://github.com/RichardLitt/standard-readme-preset/issues",
+  "author": "Richard Littauer <richard.littauer@gmail.com> (http://burntfen.com)",
+  "contributors": [
+    "Richard Littauer <richard.littauer@gmail.com> (http://burntfen.com)",
+    "Titus Wormer <tituswormer@gmail.com> (http://wooorm.com)"
+  ],
+  "files": [
+    "index.js"
+  ],
   "coordinates": [
     52.5006656,
     13.4193688
