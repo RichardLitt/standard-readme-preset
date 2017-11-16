@@ -3,17 +3,6 @@
 [`remark`][remark] preset to configure [`remark-lint`][lint] with settings that
 enforce [`standard-readme`][stdr].
 
-## Rules
-
-This preset configures [`remark-lint`][lint] with the following rules:
-
-*   [`file-extension`](https://github.com/RichardLitt/standard-readme-preset/blob/master/rules/file-extension.js)
-    — Check that `md` is used as a file extension
-*   [`file-stem`](https://github.com/RichardLitt/standard-readme-preset/blob/master/rules/file-stem.js) 
-  — Check that `README` is used as a file stem (allows i18n: `README.de`, `README.en-GB`)
-*   [`require-file-extension`](https://github.com/RichardLitt/standard-readme-preset/blob/master/rules/require-file-extension.js) 
-  — Check that a file extension is used
-
 ## Install
 
 npm:
@@ -52,6 +41,21 @@ Or use this on the API:
      console.error(report(err || file));
    });
 ```
+
+## Rules
+
+This preset configures [`remark-lint`][lint] with the following rules:
+
+*   [`file-extension`](https://github.com/RichardLitt/standard-readme-preset/blob/master/rules/file-extension.js)
+    — Check that `md` is used as a file extension
+*   [`file-stem`](https://github.com/RichardLitt/standard-readme-preset/blob/master/rules/file-stem.js) 
+  — Check that `README` is used as a file stem (allows i18n: `README.de`, `README.en-GB`)
+*   [`require-file-extension`](https://github.com/RichardLitt/standard-readme-preset/blob/master/rules/require-file-extension.js) 
+  — Check that a file extension is used
+
+## Contribute
+
+Please do! Open an issue!
 
 ## License
 
