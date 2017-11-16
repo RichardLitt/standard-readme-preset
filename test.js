@@ -5,6 +5,9 @@ var lint = require('remark-lint')
 var fileStem = require('./rules/file-stem')
 var fileExtension = require('./rules/file-extension')
 var requireFileExtension = require('./rules/require-file-extension')
+var noUnknownSections = require('./rules/no-unknown-sections')
+var requireSections = require('./rules/require-sections')
+var sectionOrder = require('./rules/section-order')
 
 test('standard-readme', function (t) {
   t.test('file-stem', function (st) {
@@ -116,6 +119,555 @@ test('standard-readme', function (t) {
       processor.processSync(vfile({path: '~/README'})).messages.map(String),
       ['~/README:1:1: Expected file extension'],
       'not ok for `README`'
+    )
+
+    st.end()
+  })
+
+  t.test('no-unknown-sections', function (st) {
+    var processor = remark().use(lint).use(noUnknownSections)
+
+    st.deepEqual(
+      processor.processSync(vfile({
+        path: '~/README.md',
+        contents: [
+          '# Title',
+          '',
+          '> Example of an OK readme.',
+          '',
+          '## Install',
+          '',
+          '```sh',
+          'npm install something',
+          '```',
+          '',
+          '## Usage',
+          '',
+          '```js',
+          'some.thing()',
+          '```',
+          '',
+          '### CLI',
+          '',
+          '```sh',
+          'some --thing',
+          '```',
+          '',
+          '## Custom',
+          '',
+          'A custom heading.',
+          '',
+          '## Another Custom',
+          '',
+          'A custom heading.',
+          '',
+          '## Contribute',
+          '',
+          'Something something.',
+          '',
+          '## License',
+          '',
+          'SPDX © Some One'
+        ].join('\n')
+      })).messages.map(String),
+      [],
+      'ok for only expected sections and extra sections in the right place'
+    )
+
+    st.deepEqual(
+      processor.processSync(vfile({
+        path: '~/README.md',
+        contents: [
+          '# Title',
+          '',
+          '> Example of an OK readme.',
+          '',
+          '## Install',
+          '',
+          '```sh',
+          'npm install something',
+          '```',
+          '',
+          '## Custom',
+          '',
+          'An wrongly placed heading.',
+          '',
+          '## Usage',
+          '',
+          '```js',
+          'some.thing()',
+          '```',
+          '',
+          '### CLI',
+          '',
+          '```sh',
+          'some --thing',
+          '```',
+          '',
+          '## Contribute',
+          '',
+          'Something something.',
+          '',
+          '## License',
+          '',
+          'SPDX © Some One'
+        ].join('\n')
+      })).messages.map(String),
+      [
+        '~/README.md:15:1-15:9: Unexpected header section after extra sections (11:1-14:1): move it in front of the extra sections'
+      ],
+      'not ok for header sections in the extra section'
+    )
+
+    st.deepEqual(
+      processor.processSync(vfile({
+        path: '~/README.md',
+        contents: [
+          '# Title',
+          '',
+          '> Example of an OK readme.',
+          '',
+          '## Install',
+          '',
+          '```sh',
+          'npm install something',
+          '```',
+          '',
+          '## Usage',
+          '',
+          '```js',
+          'some.thing()',
+          '```',
+          '',
+          '### CLI',
+          '',
+          '```sh',
+          'some --thing',
+          '```',
+          '',
+          '## Custom',
+          '',
+          'An wrongly placed heading.',
+          '',
+          '## Contribute',
+          '',
+          'Something something.',
+          '',
+          '## Another custom',
+          '',
+          'An wrongly placed heading.',
+          '',
+          '## License',
+          '',
+          'SPDX © Some One'
+        ].join('\n')
+      })).messages.map(String),
+      [
+        '~/README.md:31:1-31:18: Unexpected unknown heading in tail: move it to the extra sections (23:1-26:1)'
+      ],
+      'not ok for unknown sections in the tail sections, with extra sections'
+    )
+
+    st.deepEqual(
+      processor.processSync(vfile({
+        path: '~/README.md',
+        contents: [
+          '# Title',
+          '',
+          '> Example of an OK readme.',
+          '',
+          '## Install',
+          '',
+          '```sh',
+          'npm install something',
+          '```',
+          '',
+          '## Usage',
+          '',
+          '```js',
+          'some.thing()',
+          '```',
+          '',
+          '### CLI',
+          '',
+          '```sh',
+          'some --thing',
+          '```',
+          '',
+          '## Contribute',
+          '',
+          'Something something.',
+          '',
+          '## Custom',
+          '',
+          'An wrongly placed heading.',
+          '',
+          '## License',
+          '',
+          'SPDX © Some One'
+        ].join('\n')
+      })).messages.map(String),
+      [
+        '~/README.md:27:1-27:10: Unexpected unknown section in tail: move it in front of the tail (23:1)'
+      ],
+      'not ok for unknown sections in the tail sections, without extra sections'
+    )
+
+    st.end()
+  })
+
+  t.test('require-sections', function (st) {
+    var processor = remark().use(lint).use(requireSections)
+
+    st.deepEqual(
+      processor.processSync(vfile({
+        path: '~/README.md',
+        contents: [
+          '# Title',
+          '',
+          '> Example of an OK readme.',
+          '',
+          '## Contribute',
+          '',
+          'Something something.',
+          '',
+          '## License',
+          '',
+          'SPDX © Some One'
+        ].join('\n')
+      })).messages.map(String),
+      [],
+      'ok for required sections: `contribute` and `license`'
+    )
+
+    st.deepEqual(
+      remark()
+        .use(lint)
+        .use(requireSections, {toc: true})
+        .processSync(vfile({
+          path: '~/README.md',
+          contents: [
+            '# Title',
+            '',
+            '> Example of an OK readme.',
+            '',
+            '## Contribute',
+            '',
+            'Something something.',
+            '',
+            '## License',
+            '',
+            'SPDX © Some One'
+          ].join('\n')
+        })).messages.map(String),
+      ['~/README.md:1:1: Missing required `Table of Contents` section'],
+      'not ok for a missing `table-of-content` section with `toc: true`'
+    )
+
+    st.deepEqual(
+      remark()
+        .use(lint)
+        .use(requireSections)
+        .processSync(vfile({
+          path: '~/README.md',
+          contents: [
+            '# Title',
+            '',
+            '> Example of an OK readme.',
+            '',
+            '## Contribute',
+            '',
+            'Something something.',
+            '',
+            '## License',
+            '',
+            'SPDX © Some One',
+            '',
+            '## Table of Contents'
+          ].join('\n')
+        })).messages.map(String),
+      [],
+      'not ok for an optional `table-of-content` as the last section (coverage)'
+    )
+
+    st.deepEqual(
+      remark()
+        .use(lint)
+        .use(requireSections)
+        .processSync(vfile({
+          path: '~/README.md',
+          contents: [
+            '# Title',
+            '',
+            '> Example of an OK readme.',
+            '',
+            new Array(89).map(function (d, i) {
+              return String.fromCharCode(34 /* '/' */ + i)
+            }).join('\n'),
+            '',
+            '## Contribute',
+            '',
+            'Something something.',
+            '',
+            '## License',
+            '',
+            'SPDX © Some One'
+          ].join('\n')
+        })).messages.map(String),
+      ['~/README.md:1:1: Missing required `Table of Contents` section'],
+      'not ok for a missing `table-of-content` section by default, if 101 lines long'
+    )
+
+    st.deepEqual(
+      remark()
+        .use(lint)
+        .use(requireSections)
+        .processSync(vfile({
+          path: '~/README.md',
+          contents: [
+            '# Title',
+            '',
+            '> Example of an OK readme.',
+            '',
+            new Array(88).map(function (d, i) {
+              return String.fromCharCode(34 /* '/' */ + i)
+            }).join('\n'),
+            '',
+            '## Contribute',
+            '',
+            'Something something.',
+            '',
+            '## License',
+            '',
+            'SPDX © Some One'
+          ].join('\n')
+        })).messages.map(String),
+      [],
+      'ok for a missing `table-of-content` section by default, if 100 lines long'
+    )
+
+    st.deepEqual(
+      remark()
+        .use(lint)
+        .use(requireSections)
+        .processSync(vfile({
+          path: '~/README.md',
+          contents: [
+            '# Title',
+            '',
+            '> Example of an OK readme.',
+            '',
+            '## Table of Contents',
+            '',
+            new Array(100).map(function (d, i) {
+              return String.fromCharCode(34 /* '/' */ + i)
+            }).join('\n'),
+            '',
+            '## Contribute',
+            '',
+            'Something something.',
+            '',
+            '## License',
+            '',
+            'SPDX © Some One'
+          ].join('\n')
+        })).messages.map(String),
+      [],
+      'the lines used for the table of contents itself are ignored'
+    )
+
+    st.deepEqual(
+      remark()
+        .use(lint)
+        .use(requireSections, {installable: true})
+        .processSync(vfile({
+          path: '~/README.md',
+          contents: [
+            '# Title',
+            '',
+            '> Example of an OK readme.',
+            '',
+            '## Usage',
+            '',
+            'Something something.',
+            '',
+            '## Contribute',
+            '',
+            'Something something.',
+            '',
+            '## License',
+            '',
+            'SPDX © Some One'
+          ].join('\n')
+        })).messages.map(String),
+      ['~/README.md:1:1: Missing required `Install` section'],
+      'not ok for a missing `install` section with `installable: true`'
+    )
+
+    st.deepEqual(
+      remark()
+        .use(lint)
+        .use(requireSections, {installable: true})
+        .processSync(vfile({
+          path: '~/README.md',
+          contents: [
+            '# Title',
+            '',
+            '> Example of an OK readme.',
+            '',
+            '## Install',
+            '',
+            'Something something.',
+            '',
+            '## Contribute',
+            '',
+            'Something something.',
+            '',
+            '## License',
+            '',
+            'SPDX © Some One'
+          ].join('\n')
+        })).messages.map(String),
+      ['~/README.md:1:1: Missing required `Usage` section'],
+      'not ok for a missing `usage` section with `installable: true`'
+    )
+
+    st.end()
+  })
+
+  t.test('section-order', function (st) {
+    var processor = remark().use(lint).use(sectionOrder)
+
+    st.deepEqual(
+      processor.processSync(vfile({
+        path: '~/README.md',
+        contents: [
+          '## Table of Contents',
+          '## Security',
+          '## Background',
+          '## Install',
+          '## Usage',
+          '## API',
+          '## Maintainers',
+          '## Contribute',
+          '## License'
+        ].join('\n\n')
+      })).messages.map(String),
+      [],
+      'ok for properly ordered sections'
+    )
+
+    st.deepEqual(
+      processor.processSync(vfile({
+        path: '~/README.md',
+        contents: [
+          '## Table of Contents',
+          '## Alpha',
+          '## Usage',
+          '## Bravo',
+          '## Install',
+          '## Charlie',
+          '## Contribute',
+          '## Delta',
+          '## License'
+        ].join('\n\n')
+      })).messages.map(String),
+      ['~/README.md:9:1-9:11: Expected `install` before `usage` (5:1-5:9)'],
+      'should ignore custom extra sections'
+    )
+
+    st.deepEqual(
+      processor.processSync(vfile({
+        path: '~/README.md',
+        contents: [
+          '## Table of Contents',
+          '## Security',
+          '## Background',
+          '## Usage',
+          '## Install',
+          '## API',
+          '## Maintainers',
+          '## Contribute',
+          '## License'
+        ].join('\n\n')
+      })).messages.map(String),
+      ['~/README.md:9:1-9:11: Expected `install` before `usage` (7:1-7:9)'],
+      'not ok for one swapped sections'
+    )
+
+    st.deepEqual(
+      processor.processSync(vfile({
+        path: '~/README.md',
+        contents: [
+          '## License',
+          '## Table of Contents',
+          '## Security',
+          '## Background',
+          '## Install',
+          '## Usage',
+          '## API',
+          '## Maintainers',
+          '## Contribute'
+        ].join('\n\n')
+      })).messages.map(String),
+      [
+        '~/README.md:3:1-3:21: Expected `table-of-contents` before `license` (1:1-1:11)',
+        '~/README.md:5:1-5:12: Expected `security` before `license` (1:1-1:11)',
+        '~/README.md:7:1-7:14: Expected `background` before `license` (1:1-1:11)',
+        '~/README.md:9:1-9:11: Expected `install` before `license` (1:1-1:11)',
+        '~/README.md:11:1-11:9: Expected `usage` before `license` (1:1-1:11)',
+        '~/README.md:13:1-13:7: Expected `api` before `license` (1:1-1:11)',
+        '~/README.md:15:1-15:15: Expected `maintainers` before `license` (1:1-1:11)',
+        '~/README.md:17:1-17:14: Expected `contribute` before `license` (1:1-1:11)'
+      ],
+      'not ok for a section moved entirely upwards'
+    )
+
+    st.deepEqual(
+      processor.processSync(vfile({
+        path: '~/README.md',
+        contents: [
+          '## Security',
+          '## Background',
+          '## Install',
+          '## Usage',
+          '## API',
+          '## Maintainers',
+          '## Contribute',
+          '## License',
+          '## Table of Contents'
+        ].join('\n\n')
+      })).messages.map(String),
+      ['~/README.md:17:1-17:21: Expected `table-of-contents` before `security` (1:1-1:12)'],
+      'not ok for a section moved entirely downwards'
+    )
+
+    st.deepEqual(
+      processor.processSync(vfile({
+        path: '~/README.md',
+        contents: [
+          '## License',
+          '## Contribute',
+          '## Maintainers',
+          '## API',
+          '## Usage',
+          '## Install',
+          '## Background',
+          '## Security',
+          '## Table of Contents'
+        ].join('\n\n')
+      })).messages.map(String),
+      [
+        '~/README.md:17:1-17:21: Expected `table-of-contents` before `license` (1:1-1:11)',
+        '~/README.md:15:1-15:12: Expected `security` before `license` (1:1-1:11)',
+        '~/README.md:13:1-13:14: Expected `background` before `license` (1:1-1:11)',
+        '~/README.md:11:1-11:11: Expected `install` before `license` (1:1-1:11)',
+        '~/README.md:9:1-9:9: Expected `usage` before `license` (1:1-1:11)',
+        '~/README.md:7:1-7:7: Expected `api` before `license` (1:1-1:11)',
+        '~/README.md:5:1-5:15: Expected `maintainers` before `license` (1:1-1:11)',
+        '~/README.md:3:1-3:14: Expected `contribute` before `license` (1:1-1:11)'
+      ],
+      'not ok for all sections inverted'
     )
 
     st.end()
