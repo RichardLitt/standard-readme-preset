@@ -18,15 +18,21 @@
     "Titus Wormer <tituswormer@gmail.com> (http://wooorm.com)"
   ],
   "files": [
-    "index.js"
+    "index.js",
+    "rules",
+    "util"
   ],
   "coordinates": [
     52.5006656,
     13.4193688
   ],
   "dependencies": {
+    "github-slugger": "^1.2.0",
+    "mdast-util-to-string": "^1.0.4",
     "remark-lint-appropriate-heading": "^2.0.2",
-    "unified-lint-rule": "^1.0.2"
+    "unified-lint-rule": "^1.0.2",
+    "unist-util-position": "^3.0.0",
+    "unist-util-stringify-position": "^1.1.1"
   },
   "devDependencies": {
     "nyc": "^11.3.0",

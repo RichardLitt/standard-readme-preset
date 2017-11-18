@@ -48,10 +48,20 @@ This preset configures [`remark-lint`][lint] with the following rules:
 
 *   [`file-extension`](https://github.com/RichardLitt/standard-readme-preset/blob/master/rules/file-extension.js)
     — Check that `md` is used as a file extension
-*   [`file-stem`](https://github.com/RichardLitt/standard-readme-preset/blob/master/rules/file-stem.js) 
-  — Check that `README` is used as a file stem (allows i18n: `README.de`, `README.en-GB`)
-*   [`require-file-extension`](https://github.com/RichardLitt/standard-readme-preset/blob/master/rules/require-file-extension.js) 
-  — Check that a file extension is used
+*   [`file-stem`](https://github.com/RichardLitt/standard-readme-preset/blob/master/rules/file-stem.js)
+    — Check that `README` is used as a file stem (allows i18n: `README.de`, `README.en-GB`)
+*   [`require-file-extension`](https://github.com/RichardLitt/standard-readme-preset/blob/master/rules/require-file-extension.js)
+    — Check that a file extension is used
+*   [`no-unknown-sections`](https://github.com/RichardLitt/standard-readme-preset/blob/master/rules/no-unknown-sections.js)
+    — Check that only known sections are used, except for in the extra sections
+*   [`require-sections`](https://github.com/RichardLitt/standard-readme-preset/blob/master/rules/require-sections.js)
+    — Check that required sections (`contribute`, `license`) exist.
+    `table-of-contents` is required if `toc: true` is given, optional for
+    `toc: false`, and otherwise inferred based on if the number of lines in the
+    file, excluding the ToC itself, exceeds 100.
+    `install` and `usage` are required if `installable: true` is given.
+*   [`section-order`](https://github.com/RichardLitt/standard-readme-preset/blob/master/rules/section-order.js)
+    — Check that sections are used in the order they’re supposed to
 
 ## Contribute
 
