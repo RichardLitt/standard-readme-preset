@@ -1,5 +1,7 @@
 # standard-readme-preset
 
+[![Greenkeeper badge](https://badges.greenkeeper.io/RichardLitt/standard-readme-preset.svg)](https://greenkeeper.io/)
+
 [`remark`][remark] preset to configure [`remark-lint`][lint] with settings that
 enforce [`standard-readme`][stdr].
 
