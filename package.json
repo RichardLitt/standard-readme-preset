@@ -1,6 +1,6 @@
 {
   "name": "standard-readme-preset",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "remark preset to configure remark-lint with rules that standard-readme",
   "license": "ISC",
   "keywords": [
