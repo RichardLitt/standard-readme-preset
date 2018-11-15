@@ -36,7 +36,7 @@
   },
   "devDependencies": {
     "nyc": "^12.0.1",
-    "remark": "^8.0.0",
+    "remark": "^10.0.1",
     "remark-lint": "^6.0.1",
     "standard": "^11.0.0",
     "tape": "^4.8.0",
