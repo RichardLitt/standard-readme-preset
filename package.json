@@ -35,7 +35,7 @@
     "unist-util-stringify-position": "^1.1.1"
   },
   "devDependencies": {
-    "nyc": "^12.0.1",
+    "nyc": "^13.2.0",
     "remark": "^8.0.0",
     "remark-lint": "^6.0.1",
     "standard": "^11.0.0",
