@@ -17,7 +17,7 @@ var tail = [
   'api',
   'maintainer',
   'maintainers',
-  'contribute',
+  'contributing',
   'license'
 ]
 
@@ -44,7 +44,7 @@ function noUnknownSections (ast, file) {
           tailStart = position.start(section.node)
         } else {
           state = 'custom'
-          customPosition = {start: position.start(section.node)}
+          customPosition = { start: position.start(section.node) }
         }
       }
     } else if (state === 'tail') {

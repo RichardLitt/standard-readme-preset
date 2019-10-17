@@ -12,12 +12,12 @@ var pretty = {
   'table-of-contents': 'Table of Contents',
   install: 'Install',
   usage: 'Usage',
-  contribute: 'Contribute',
+  contributing: 'Contributing',
   license: 'License'
 }
 
 var alwaysRequired = [
-  'contribute',
+  'contributing',
   'license'
 ]
 

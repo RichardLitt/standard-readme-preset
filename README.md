@@ -57,7 +57,7 @@ This preset configures [`remark-lint`][lint] with the following rules:
 *   [`no-unknown-sections`](https://github.com/RichardLitt/standard-readme-preset/blob/master/rules/no-unknown-sections.js)
     — Check that only known sections are used, except for in the extra sections
 *   [`require-sections`](https://github.com/RichardLitt/standard-readme-preset/blob/master/rules/require-sections.js)
-    — Check that required sections (`contribute`, `license`) exist.
+    — Check that required sections (`contributing`, `license`) exist.
     `table-of-contents` is required if `toc: true` is given, optional for
     `toc: false`, and otherwise inferred based on if the number of lines in the
     file, excluding the ToC itself, exceeds 100.
@@ -65,7 +65,7 @@ This preset configures [`remark-lint`][lint] with the following rules:
 *   [`section-order`](https://github.com/RichardLitt/standard-readme-preset/blob/master/rules/section-order.js)
     — Check that sections are used in the order they’re supposed to
 
-## Contribute
+## Contributing
 
 Please do! Open an issue!
 

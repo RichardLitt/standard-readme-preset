@@ -15,7 +15,7 @@ var order = [
   /* Note: maintainer and maintainers don’t matter in this case... */
   'maintainer',
   'maintainers',
-  'contribute',
+  'contributing',
   'license'
 ]
 
