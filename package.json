@@ -39,7 +39,7 @@
     "remark": "^8.0.0",
     "remark-lint": "^6.0.1",
     "standard": "^12.0.0",
-    "tape": "^4.8.0",
+    "tape": "^4.12.1",
     "vfile": "^2.2.0"
   },
   "scripts": {
