@@ -341,6 +341,22 @@ test('standard-readme', function (t) {
     )
 
     st.deepEqual(
+      processor.processSync(vfile({
+        path: '~/README.md',
+        contents: [
+          'Example of an OK readme.',
+          '',
+          '## Contributing',
+          '## License',
+          '',
+          'SPDX © Some One'
+        ].join('\n')
+      })).messages.map(String),
+      ['~/README.md:1:1: `Contributing` section is empty'],
+      'not ok for empty `contributing` section'
+    )
+
+    st.deepEqual(
       remark()
         .use(lint)
         .use(requireSections, { toc: true })

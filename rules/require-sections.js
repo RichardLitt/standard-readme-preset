@@ -34,12 +34,14 @@ function requireSections (ast, file, options) {
     required.push('install', 'usage')
   }
 
-  sections = sections.map(id)
   required.forEach(check)
 
   function check (slug) {
-    if (sections.indexOf(slug) === -1) {
+    const section = sections.find(findSlug, slug)
+    if (!section) {
       file.message('Missing required `' + pretty[slug] + '` section')
+    } else if (!section.paragraph) {
+      file.message('`' + pretty[slug] + '` section is empty')
     }
   }
 }
@@ -63,6 +65,6 @@ function inferToc (tree, sections) {
   return lines > maxLinesWithoutTableOfContents
 }
 
-function id (info) {
-  return info.id
+function findSlug (info) {
+  return info.id === this.toString()
 }

@@ -13,15 +13,31 @@ function schema (tree) {
   slugs.reset()
 
   /* Get all headings of level 2 and use slugs as IDs for each heading. */
+  let getParagraph
+
   while (++index < length) {
     node = children[index]
 
-    if (node.type === 'heading' && node.depth === 2) {
-      map.push({
-        id: slugs.slug(toString(node)),
-        node: node
-      })
+    switch (node.type) {
+      case 'heading':
+        if (node.depth !== 2) break
+
+        map.push({
+          id: slugs.slug(toString(node)),
+          node: node
+        })
+
+        getParagraph = true
+        continue
+
+      case 'paragraph':
+        if (getParagraph) {
+          map[map.length - 1].paragraph = node
+        }
+        break
     }
+
+    getParagraph = false
   }
 
   return map
