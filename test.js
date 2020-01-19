@@ -618,7 +618,7 @@ test('standard-readme', function (t) {
         '~/README.md:11:1-11:9: Expected `usage` before `license` (1:1-1:11)',
         '~/README.md:13:1-13:7: Expected `api` before `license` (1:1-1:11)',
         '~/README.md:15:1-15:15: Expected `maintainers` before `license` (1:1-1:11)',
-        '~/README.md:17:1-17:14: Expected `contributing` before `license` (1:1-1:11)'
+        '~/README.md:17:1-17:16: Expected `contributing` before `license` (1:1-1:11)'
       ],
       'not ok for a section moved entirely upwards'
     )
@@ -665,7 +665,7 @@ test('standard-readme', function (t) {
         '~/README.md:9:1-9:9: Expected `usage` before `license` (1:1-1:11)',
         '~/README.md:7:1-7:7: Expected `api` before `license` (1:1-1:11)',
         '~/README.md:5:1-5:15: Expected `maintainers` before `license` (1:1-1:11)',
-        '~/README.md:3:1-3:14: Expected `contributing` before `license` (1:1-1:11)'
+        '~/README.md:3:1-3:16: Expected `contributing` before `license` (1:1-1:11)'
       ],
       'not ok for all sections inverted'
     )
