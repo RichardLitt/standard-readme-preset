@@ -40,7 +40,7 @@
     "remark-lint": "^6.0.1",
     "standard": "^12.0.0",
     "tape": "^4.8.0",
-    "vfile": "^2.2.0"
+    "vfile": "^4.0.3"
   },
   "scripts": {
     "lint": "standard",
