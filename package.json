@@ -37,16 +37,19 @@
   "devDependencies": {
     "nyc": "^13.2.0",
     "remark": "^8.0.0",
+    "remark-cli": "^8.0.0",
     "remark-lint": "^6.0.6",
     "standard": "^12.0.0",
     "tape": "^4.8.0",
+    "unist-util-select": "^3.0.1",
     "vfile": "^2.2.0"
   },
   "scripts": {
     "lint": "standard",
+    "lint-readme": "remark README.md --use ./lint-readme --no-stdout --frail",
     "test-api": "node test",
     "test-coverage": "nyc --reporter lcov tape test.js",
-    "test": "npm run lint && npm run test-coverage"
+    "test": "npm run lint && npm run lint-readme && npm run test-coverage"
   },
   "nyc": {
     "check-coverage": true,
