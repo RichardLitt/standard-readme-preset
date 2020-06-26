@@ -15,7 +15,8 @@
   "author": "Richard Littauer <richard.littauer@gmail.com> (http://burntfen.com)",
   "contributors": [
     "Richard Littauer <richard.littauer@gmail.com> (http://burntfen.com)",
-    "Titus Wormer <tituswormer@gmail.com> (http://wooorm.com)"
+    "Titus Wormer <tituswormer@gmail.com> (http://wooorm.com)",
+    "Dieter Geerts <dieter@dworks.be> (https://dietergeerts.github.io/)"
   ],
   "files": [
     "index.js",
