@@ -15,7 +15,8 @@
   "author": "Richard Littauer <richard.littauer@gmail.com> (http://burntfen.com)",
   "contributors": [
     "Richard Littauer <richard.littauer@gmail.com> (http://burntfen.com)",
-    "Titus Wormer <tituswormer@gmail.com> (http://wooorm.com)"
+    "Titus Wormer <tituswormer@gmail.com> (http://wooorm.com)",
+    "Dieter Geerts <dieter@dworks.be> (https://dietergeerts.github.io/)"
   ],
   "files": [
     "index.js",
@@ -26,6 +27,9 @@
     52.5006656,
     13.4193688
   ],
+  "engines": {
+    "node": "^10 || ^12 || ^14"
+  },
   "dependencies": {
     "github-slugger": "^1.2.0",
     "mdast-util-to-string": "^1.0.4",
@@ -37,16 +41,19 @@
   "devDependencies": {
     "nyc": "^13.2.0",
     "remark": "^8.0.0",
+    "remark-cli": "^8.0.0",
     "remark-lint": "^6.0.6",
     "standard": "^12.0.0",
     "tape": "^4.8.0",
+    "unist-util-select": "^3.0.1",
     "vfile": "^2.2.0"
   },
   "scripts": {
     "lint": "standard",
+    "lint-readme": "remark README.md --use ./lint-readme --no-stdout --frail",
     "test-api": "node test",
     "test-coverage": "nyc --reporter lcov tape test.js",
-    "test": "npm run lint && npm run test-coverage"
+    "test": "npm run lint && npm run lint-readme && npm run test-coverage"
   },
   "nyc": {
     "check-coverage": true,
