@@ -13,6 +13,11 @@ npm:
 npm install standard-readme-preset
 ```
 
+### Dependencies
+
+- [NodeJS](https://nodejs.org/). _Check "engines" field in
+    "[package.json](./package.json)" for official supported versions_
+
 ## Usage
 
 You probably want to use it on the CLI through a config file:

@@ -27,6 +27,9 @@
     52.5006656,
     13.4193688
   ],
+  "engines": {
+    "node": "^10 || ^12 || ^14"
+  },
   "dependencies": {
     "github-slugger": "^1.2.0",
     "mdast-util-to-string": "^1.0.4",
