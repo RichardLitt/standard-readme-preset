@@ -10,7 +10,7 @@ module.exports = rule(
     const rules = select.selectAll('listItem link inlineCode', rulesList)
     const foundRules = rules.map((rule) => rule.value)
 
-    const expectedRules = preset.plugins.map((rule) => rule.displayName)
+    const expectedRules = preset.plugins.map(([rule]) => rule.displayName)
 
     foundRules.forEach((rule) => {
       if (!expectedRules.includes(rule)) {

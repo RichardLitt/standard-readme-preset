@@ -1,9 +1,9 @@
 exports.plugins = [
-  require('remark-lint-appropriate-heading'),
-  require('./rules/file-stem'),
-  require('./rules/file-extension'),
-  require('./rules/require-file-extension'),
-  require('./rules/no-unknown-sections'),
-  require('./rules/require-sections'),
-  require('./rules/section-order')
+  [require('remark-lint-appropriate-heading'), ['error']],
+  [require('./rules/file-stem'), ['error']],
+  [require('./rules/file-extension'), ['error']],
+  [require('./rules/require-file-extension'), ['error']],
+  [require('./rules/no-unknown-sections'), ['error']],
+  [require('./rules/require-sections'), ['error']],
+  [require('./rules/section-order'), ['error']]
 ]
