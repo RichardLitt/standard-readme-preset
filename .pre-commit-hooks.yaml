@@ -3,4 +3,4 @@
   description: Check README compliance with standard-readme spec
   entry: npx -p remark-cli remark -u standard-readme-preset -f
   language: node
-  files: 'README.md'
+  files: '^README.md$'
