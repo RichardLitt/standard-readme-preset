@@ -34,7 +34,6 @@
     "github-slugger": "^1.2.0",
     "mdast-util-to-string": "^1.0.4",
     "remark-lint-appropriate-heading": "^2.0.3",
-    "remark-title": "^1.0.4",
     "unified-lint-rule": "^1.0.5",
     "unist-util-position": "^3.0.0",
     "unist-util-stringify-position": "^1.1.1"
