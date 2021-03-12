@@ -9,35 +9,34 @@ function schema (tree) {
   var length = children.length
   var index = -1
   var node
+  var nextNode
 
   slugs.reset()
 
   /* Get all headings of level 2 and use slugs as IDs for each heading. */
-  let getParagraph
-
   while (++index < length) {
     node = children[index]
 
-    switch (node.type) {
-      case 'heading':
-        if (node.depth !== 2) break
+    if (node.type === 'heading' && node.depth === 2) {
+      map.push({
+        id: slugs.slug(toString(node)),
+        node: node,
+        isEmpty: false
+      })
 
-        map.push({
-          id: slugs.slug(toString(node)),
-          node: node
-        })
+      if (index + 1 < length) {
+        nextNode = children[index + 1]
 
-        getParagraph = true
-        continue
-
-      case 'paragraph':
-        if (getParagraph) {
-          map[map.length - 1].paragraph = node
+        // If the next node is a header level 2, this section is empty
+        if (nextNode.type === 'heading' && nextNode.depth === 2) {
+          map[map.length - 1].isEmpty = true
         }
-        break
+      } else {
+        // If there is no next node, this section is right before the end of the
+        // document, and also empty
+        map[map.length - 1].isEmpty = true
+      }
     }
-
-    getParagraph = false
   }
 
   return map

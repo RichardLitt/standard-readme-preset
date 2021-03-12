@@ -40,7 +40,7 @@ function requireSections (ast, file, options) {
     const section = sections.find(findSlug, slug)
     if (!section) {
       file.message('Missing required `' + pretty[slug] + '` section')
-    } else if (!section.paragraph) {
+    } else if (section.isEmpty) {
       file.message('`' + pretty[slug] + '` section is empty')
     }
   }
