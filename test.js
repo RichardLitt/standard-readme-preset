@@ -357,6 +357,23 @@ test('standard-readme', function (t) {
     )
 
     st.deepEqual(
+      processor.processSync(vfile({
+        path: '~/README.md',
+        contents: [
+          'Example of an OK readme.',
+          '',
+          '## Contributing',
+          '',
+          'Something something.',
+          '',
+          '## License'
+        ].join('\n')
+      })).messages.map(String),
+      ['~/README.md:1:1: `License` section is empty'],
+      'not ok for empty `license` section at end of file (coverage)'
+    )
+
+    st.deepEqual(
       remark()
         .use(lint)
         .use(requireSections, { toc: true })
@@ -490,6 +507,57 @@ test('standard-readme', function (t) {
         })).messages.map(String),
       [],
       'the lines used for the table of contents itself are ignored'
+    )
+
+    st.deepEqual(
+      remark()
+        .use(lint)
+        .use(requireSections, { toc: true })
+        .processSync(vfile({
+          path: '~/README.md',
+          contents: [
+            'Example of an OK readme.',
+            '',
+            '## Table of Contents',
+            '',
+            '## Contributing',
+            '',
+            'Something something.',
+            '',
+            '## License',
+            '',
+            'SPDX © Some One'
+          ].join('\n')
+        })).messages.map(String),
+      ['~/README.md:1:1: `Table of Contents` section is empty'],
+      'not ok for empty `table-of-contents` section'
+    )
+
+    st.deepEqual(
+      remark()
+        .use(lint)
+        .use(requireSections, { toc: true })
+        .processSync(vfile({
+          path: '~/README.md',
+          contents: [
+            'Example of an OK readme.',
+            '',
+            '## Table of Contents',
+            '',
+            '- [Contributing](#contributing)',
+            '- [License](#license)',
+            '',
+            '## Contributing',
+            '',
+            'Something something.',
+            '',
+            '## License',
+            '',
+            'SPDX © Some One'
+          ].join('\n')
+        })).messages.map(String),
+      [],
+      'ok for `table-of-contents` section with list items only'
     )
 
     st.deepEqual(
