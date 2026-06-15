@@ -2,6 +2,7 @@ var test = require('tape')
 var remark = require('remark')
 var vfile = require('vfile')
 var lint = require('remark-lint')
+var preset = require('./')
 var fileStem = require('./rules/file-stem')
 var fileExtension = require('./rules/file-extension')
 var requireFileExtension = require('./rules/require-file-extension')
@@ -45,8 +46,8 @@ test('standard-readme', function (t) {
 
     st.deepEqual(
       processor.processSync(vfile({ path: '~/CONTRIBUTING.md' })).messages.map(String),
-      ['~/CONTRIBUTING.md:1:1: Expected `README` instead of `CONTRIBUTING` as file name'],
-      'not ok for `CONTRIBUTING.md`'
+      [],
+      'ok for `CONTRIBUTING.md`, which is not a readme'
     )
 
     st.deepEqual(
@@ -59,6 +60,43 @@ test('standard-readme', function (t) {
       processor.processSync(vfile({ path: '~/readme.nl-BE.md' })).messages.map(String),
       ['~/readme.nl-BE.md:1:1: Expected `README` instead of `readme` as file name'],
       'not ok for `readme.nl-BE.md`, an internationalized README with a language tag and region tag'
+    )
+
+    st.end()
+  })
+
+  t.test('preset', function (st) {
+    var processor = remark().use(lint).use(preset)
+
+    st.deepEqual(
+      processor.processSync(vfile({
+        path: '~/SUPPORT.md',
+        contents: [
+          '# support',
+          '',
+          'Support information.'
+        ].join('\n')
+      })).messages.map(String),
+      [],
+      'ok for `SUPPORT.md`, which is not a readme'
+    )
+
+    st.deepEqual(
+      processor.processSync(vfile({
+        path: '~/readme.md',
+        contents: [
+          '# readme',
+          '',
+          'Readme information.'
+        ].join('\n')
+      })).messages.map(String),
+      [
+        '~/readme.md:1:1-1:9: Heading \'readme\' is not the directory name',
+        '~/readme.md:1:1: Expected `README` instead of `readme` as file name',
+        '~/readme.md:1:1: Missing required `Contributing` section',
+        '~/readme.md:1:1: Missing required `License` section'
+      ],
+      'not ok for `readme.md`, which is a readme with the wrong case'
     )
 
     st.end()

@@ -1,4 +1,5 @@
 var rule = require('unified-lint-rule')
+var isReadme = require('../util/is-readme')
 // var position = require('unist-util-position')
 var stringify = require('unist-util-stringify-position')
 var schema = require('../util/schema')
@@ -20,6 +21,10 @@ var order = [
 ]
 
 function sectionOrder (ast, file) {
+  if (!isReadme(file)) {
+    return
+  }
+
   var sections = schema(ast)
   var byId = {}
   var length = sections.length

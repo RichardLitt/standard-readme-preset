@@ -1,4 +1,5 @@
 var rule = require('unified-lint-rule')
+var isReadme = require('../util/is-readme')
 var position = require('unist-util-position')
 var schema = require('../util/schema')
 
@@ -22,6 +23,10 @@ var alwaysRequired = [
 ]
 
 function requireSections (ast, file, options) {
+  if (!isReadme(file)) {
+    return
+  }
+
   var sections = schema(ast)
   var required = alwaysRequired.concat()
   var settings = options || {}
