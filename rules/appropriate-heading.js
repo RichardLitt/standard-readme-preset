@@ -1,5 +1,6 @@
 var appropriateHeading = require('remark-lint-appropriate-heading')
 var isReadme = require('../util/is-readme')
+var matchesAlias = require('../util/matches-alias')
 
 module.exports = readmeAppropriateHeading
 readmeAppropriateHeading.displayName = appropriateHeading.displayName
@@ -13,10 +14,16 @@ function readmeAppropriateHeading (options) {
   }
 
   return function transformerForReadmes (ast, file, next) {
-    if (isReadme(file)) {
-      transformer(ast, file, next)
-    } else {
+    if (!isReadme(file)) {
       next()
+      return
     }
+
+    if (matchesAlias(ast, file)) {
+      next()
+      return
+    }
+
+    transformer(ast, file, next)
   }
 }
