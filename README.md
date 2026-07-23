@@ -54,7 +54,10 @@ Or use this on the API:
 This preset configures [`remark-lint`][lint] with the following rules:
 
 *   [`remark-lint:appropriate-heading`](https://github.com/RichardLitt/remark-lint-appropriate-heading)
-    — Check that the top-level heading matches the directory name
+    — Check that the top-level heading matches the directory name. A heading
+    is also accepted if it ends with a parenthesized alias matching the
+    directory name, per the [Title section of the standard-readme
+    spec][title-spec], e.g. `# Standard Readme Style _(standard-readme)_`
 *   [`standard-readme:file-extension`](https://github.com/RichardLitt/standard-readme-preset/blob/master/rules/file-extension.js)
     — Check that `md` is used as a file extension
 *   [`standard-readme:file-stem`](https://github.com/RichardLitt/standard-readme-preset/blob/master/rules/file-stem.js)
@@ -89,4 +92,6 @@ Please do! Open an issue!
 [lint]: https://github.com/wooorm/remark-lint
 
 [stdr]: https://github.com/RichardLitt/standard-readme
+
+[title-spec]: https://github.com/RichardLitt/standard-readme/blob/master/spec.md#title
 

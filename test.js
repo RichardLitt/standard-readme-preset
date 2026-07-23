@@ -1,8 +1,10 @@
+var path = require('path')
 var test = require('tape')
 var remark = require('remark')
 var vfile = require('vfile')
 var lint = require('remark-lint')
 var preset = require('./')
+var appropriateHeading = require('./rules/appropriate-heading')
 var fileStem = require('./rules/file-stem')
 var fileExtension = require('./rules/file-extension')
 var requireFileExtension = require('./rules/require-file-extension')
@@ -60,6 +62,83 @@ test('standard-readme', function (t) {
       processor.processSync(vfile({ path: '~/readme.nl-BE.md' })).messages.map(String),
       ['~/readme.nl-BE.md:1:1: Expected `README` instead of `readme` as file name'],
       'not ok for `readme.nl-BE.md`, an internationalized README with a language tag and region tag'
+    )
+
+    st.end()
+  })
+
+  t.test('appropriate-heading', function (st) {
+    var processor = remark().use(lint).use(appropriateHeading)
+
+    function process (dir, contents) {
+      return processor.processSync(vfile({
+        path: path.join('~', dir, 'README.md'),
+        contents: contents
+      })).messages.map(String)
+    }
+
+    st.deepEqual(
+      process('standard-readme', '# standard-readme\n'),
+      [],
+      'ok when the heading matches the directory name exactly'
+    )
+
+    st.deepEqual(
+      process('standard-readme', '# Standard Readme Style _(standard-readme)_\n'),
+      [],
+      'ok when the heading ends with an italicized alias matching the directory name'
+    )
+
+    st.deepEqual(
+      process('standard-readme', '# Standard Readme Style (standard-readme)\n'),
+      [],
+      'ok when the heading ends with a plain-parenthesized alias matching the directory name'
+    )
+
+    st.deepEqual(
+      process('standard-readme', '# Standard Readme Style _(Standard-Readme)_\n'),
+      [],
+      'ok when the alias only differs from the directory name by case'
+    )
+
+    st.deepEqual(
+      process('@scope/package', '# My Package _(package)_\n'),
+      [],
+      'ok when the alias matches an unscoped package directory name'
+    )
+
+    st.deepEqual(
+      process('standard-readme', '# Some Other Title _(some-other-package)_\n'),
+      [
+        '~/standard-readme/README.md:1:1-1:42: Heading \'some other title (some-other-package)\' is not the directory name'
+      ],
+      'not ok when the alias does not match the directory name'
+    )
+
+    st.deepEqual(
+      process('standard-readme', '# Invalid\n'),
+      [
+        '~/standard-readme/README.md:1:1-1:10: Heading \'invalid\' is not the directory name'
+      ],
+      'not ok when there is no alias and the heading does not match the directory name'
+    )
+
+    st.deepEqual(
+      process('standard-readme', 'Paragraph\n'),
+      [
+        '~/standard-readme/README.md:1:1-1:10: Document must start with a heading'
+      ],
+      'not ok when the document does not start with a heading at all'
+    )
+
+    st.deepEqual(
+      processor.processSync(vfile({
+        cwd: path.join('~', 'standard-readme'),
+        path: 'README.md',
+        contents: '# Standard Readme Style _(standard-readme)_\n'
+      })).messages.map(String),
+      [],
+      'ok when the README has no directory of its own and falls back to `cwd`'
     )
 
     st.end()
